@@ -57,7 +57,6 @@ This is a personal portfolio website built with **Vue 3** and **Django**. It sho
 - Python 3.13.2  
 - PostgreSQL
 - Virtualenv
-- Django
 
 ### ▶️ Backend Setup
 1. Activate venv
@@ -70,7 +69,33 @@ source personal_portfolio_venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 🖥️ Useful commands
+3. Run Development server
+```
+python manage.py runserver
 ```
 
+4. Create a super user to access admin panel
 ```
+python manage.py createsuperuser
+```
+
+5. Run the migrations
+```
+python manage.py makemigrations
+python manage.py migrate
+```
+
+6. You can access the admin panel via http://localhost:8000/admin
+
+### 🖥️ Useful commands
+When you install a new library, use this to update the requirements.txt file
+```
+pip freeze > requirements.txt
+```
+
+Running tests
+```
+python manage.py test
+```
+
+### 🪲 Troubleshooting
