@@ -98,4 +98,9 @@ Running tests
 python manage.py test
 ```
 
+For generating database documentation
+```
+python manage.py spectacular --color --file schema.yml
+```
+
 ### 🪲 Troubleshooting
