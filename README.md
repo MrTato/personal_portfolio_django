@@ -103,4 +103,9 @@ For generating database documentation
 python manage.py spectacular --color --file schema.yml
 ```
 
+For collecting static files
+```
+python manage.py collectstatic
+```
+
 ### 🪲 Troubleshooting

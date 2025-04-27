@@ -1,5 +1,5 @@
 from django.db import models
-from django.utils import timezone
+from markdownx.models import MarkdownxField
 
 # Create your models here.
 
@@ -7,7 +7,7 @@ from django.utils import timezone
 class BlogPost(models.Model):
     title = models.CharField(max_length=100)
     slug = models.SlugField(unique=True, blank=True)
-    content = models.TextField(blank=True)
+    content = MarkdownxField(blank=True)
     created_at = models.DateTimeField(
         auto_now_add=True, editable=False)
     updated_at = models.DateTimeField(

@@ -28,4 +28,5 @@ urlpatterns = [
          SpectacularSwaggerView.as_view(url_name='schema', permission_classes=[IsAuthenticated]), name='swagger-ui'),
     path('redoc/',
          SpectacularRedocView.as_view(url_name='schema', permission_classes=[IsAuthenticated]), name='redoc'),
+    path('markdownx/', include('markdownx.urls')),
 ]
