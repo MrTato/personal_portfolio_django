@@ -6,7 +6,7 @@ from markdownx.models import MarkdownxField
 
 class BlogPost(models.Model):
     title = models.CharField(max_length=100)
-    slug = models.SlugField(unique=True, blank=True)
+    slug = models.SlugField(unique=True)
     content = MarkdownxField(blank=True)
     created_at = models.DateTimeField(
         auto_now_add=True, editable=False)
