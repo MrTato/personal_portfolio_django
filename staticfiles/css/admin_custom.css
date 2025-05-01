@@ -1,12 +1,12 @@
 /* admin_custom.css */
 .markdownx {
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 1rem !important;
   }
   
   .markdownx-editor,
   .markdownx-preview {
-    width: 50%;
+    width: 32rem !important;
   }
   

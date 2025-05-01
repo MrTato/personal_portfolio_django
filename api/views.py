@@ -10,3 +10,4 @@ class BlogPostViewSet(viewsets.ModelViewSet):
     queryset = BlogPost.objects.all()
     serializer_class = BlogPostSerializer
     permission_classes = [AllowAny]
+    lookup_field = 'slug'
