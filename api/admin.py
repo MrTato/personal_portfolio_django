@@ -1,16 +1,10 @@
 from django.contrib import admin
 from markdownx.admin import MarkdownxModelAdmin
-from api.models import BlogPost, BlogPostImage
-
-
-class BlogPostImageInline(admin.TabularInline):
-    model = BlogPostImage
-    extra = 1
+from api.models import BlogPost
 
 
 class BlogPostAdmin(MarkdownxModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
-    inlines = [BlogPostImageInline]
 
     class Media:
         css = {
