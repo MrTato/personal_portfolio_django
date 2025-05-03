@@ -9,7 +9,10 @@ class BlogPostSerializer(serializers.ModelSerializer):
             'title',
             'slug',
             'content',
+            'description',
+            'cover_image',
+            'preview_image',
             'created_at',
             'updated_at',
-            'published'
+            'spotlight',
         )
