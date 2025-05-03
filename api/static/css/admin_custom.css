@@ -1,5 +1,6 @@
-/* admin_custom.css */
-.markdownx {
+/* Cancel out styles on tablet and smaller screens */
+@media (min-width: 1024px) {
+  .markdownx {
     display: flex !important;
     flex-direction: row !important;
     gap: 1rem !important;
@@ -9,4 +10,4 @@
   .markdownx-preview {
     width: 32rem !important;
   }
-  
+}
