@@ -1,111 +1,120 @@
-# 🌐 Personal Portfolio Website
+# 🛠️ Django Backend for Personal Portfolio
 
-This is a personal portfolio website built with **Vue 3** and **Django**. It showcases my blog posts and personal projects with a clean, dark-themed, responsive design. I’m using this project to hone my full-stack development skills while creating something personally meaningful.
+This is the backend API for my personal portfolio site. Built with **Django** and **Django REST Framework**, it serves blog content to a Vue 3 frontend. The backend is read-only for the public and fully managed via the Django Admin panel. It is designed to be lightweight, secure, and easy to maintain.
 
 ---
 
-## ✨ Features
+## 🚀 Features
 
-### 📝 Blog Section
-- Posts written and managed via Django Admin  
-- Rendered in Vue using Markdown ([Marked.js](https://marked.js.org/))  
-- Public comments with spam and self-promotion filtering
+- 📝 **Blog API**  
+  - Markdown-based content storage (rendered client-side)  
+  - Draft support via `is_published` field  
+  - Comment system planned (not yet implemented)  
+  - No authentication or admin endpoints — only public `GET` endpoints
 
-### 💼 Project Showcase
-- Gallery of project cards with screenshots, tech stack, and links  
-- Dedicated detail pages for each project  
-- Content managed through Django Admin
+- 📃 **OpenAPI Schema**  
+  - Exposed via [drf-spectacular](https://drf-spectacular.readthedocs.io/en/latest/)  
+  - Accessible at `/swagger/` and `/redoc/`
 
-### 📬 Contact Form
-- Sends emails directly to my inbox  
-- Client-side validation
+- 🌐 **CORS Enabled**  
+  - Configured for safe interaction with the Vue frontend  
 
-### 🌍 Multilingual Support
-- Toggle between English and Spanish using [Vue I18n](https://vue-i18n.intlify.dev/)
-
-### 🌑 Dark Theme
-- Responsive layout for mobile and desktop  
-- Based on a free dark [Figma](https://www.figma.com/) template
+- 📦 **Hosted on Render**  
+  - Managed PostgreSQL database  
+  - Automatic deployment on `git push`  
+  - Static files served via Django
 
 ---
 
 ## 🛠 Tech Stack
 
-### 🔹 Frontend
-- [Vue 3](https://vuejs.org/)  
-- [Vue Router](https://router.vuejs.org/)  
-- [Axios](https://axios-http.com/)  
-- [Marked.js](https://marked.js.org/)  
-- [Vue I18n](https://vue-i18n.intlify.dev/)
+### 🔹 Core
+- [Django 5.x](https://www.djangoproject.com/)
+- [Django REST Framework](https://www.django-rest-framework.org/)
+- [drf-spectacular](https://drf-spectacular.readthedocs.io/)
+- [PostgreSQL](https://www.postgresql.org/)
 
-### 🔹 Backend
-- [Python 3](https://www.python.org/)  
-- [Django](https://www.djangoproject.com/)  
-- [Django REST Framework](https://www.django-rest-framework.org/)  
-- [PostgreSQL](https://www.postgresql.org/)  
-- [django-markdownx](https://neutronx.github.io/django-markdownx/)  
+### 🔹 Middleware
+- [WhiteNoise](https://whitenoise.evans.io/) for static file handling
 - [django-cors-headers](https://pypi.org/project/django-cors-headers/)
 
-### 🔹 Hosting
-- [DigitalOcean](https://www.digitalocean.com/) VPS  
-- [Gunicorn](https://gunicorn.org/) + [Nginx](https://www.nginx.com/)  
-- Manual deployment (for now)
+---
 
-## 🚀 Getting Started
+## ⚙️ Setup Instructions
 
-### 🔧 Prerequisites
+### 🧱 Prerequisites
+
 - Python 3.13.2  
-- PostgreSQL
-- Virtualenv
+- PostgreSQL database  
+- `virtualenv` installed
 
-### ▶️ Backend Setup
-1. Activate venv
-```
-source personal_portfolio_venv/bin/activate
-```
+### ▶️ Local Development
 
-2. Install requirements
-```
-pip install -r requirements.txt
-```
+1. Create and activate a virtual environment:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate
+   ```
 
-3. Run Development server
-```
-python manage.py runserver
-```
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-4. Create a super user to access admin panel
-```
-python manage.py createsuperuser
-```
+3. Apply migrations:
+   ```bash
+   python manage.py migrate
+   ```
 
-5. Run the migrations
-```
-python manage.py makemigrations
-python manage.py migrate
-```
+4. Create a superuser:
+   ```bash
+   python manage.py createsuperuser
+   ```
 
-6. You can access the admin panel via http://localhost:8000/admin
+5. Run the server:
+   ```bash
+   python manage.py runserver
+   ```
 
-### 🖥️ Useful commands
-When you install a new library, use this to update the requirements.txt file
-```
-pip freeze > requirements.txt
-```
+6. Access the admin panel at:
+   ```
+   http://localhost:8000/admin
+   ```
 
-Running tests
-```
-python manage.py test
-```
+---
 
-For generating database documentation
-```
-python manage.py spectacular --color --file schema.yml
-```
+## 📤 Deployment (Render)
 
-For collecting static files
-```
-python manage.py collectstatic
-```
+This app is hosted on **Render** using a **native Python environment**. When deploying, the app will use your env variables to create a super user in order to control the admin panel. The environment variables you need to set are:
+SECRET_KEY=
+DEBUG=True
+DB_NAME=personal_portfolio
+DB_USER=
+DB_PASSWORD=
+DB_HOST=localhost
+DB_PORT=5432
+ALLOWED_HOSTS=127.0.0.1,localhost
+CORS_ALLOWED_ORIGINS=http://127.0.0.1:5173,http://localhost:5173
+DJANGO_SUPERUSER_USERNAME
+DJANGO_SUPERUSER_EMAIL
+DJANGO_SUPERUSER_PASSWORD
 
-### 🪲 Troubleshooting
+If on development, you have to first create the databas in PostgreSQL along with the database user you will use to connect to the database (the default is fine for development).
+
+The DJANGO_* environment variables are used for creating the admin super user automatically.
+
+Auto-deploy is triggered on `git push` to the main branch.
+
+---
+
+## 📄 License
+
+This project is for personal use and learning.  
+Feel free to explore and learn from it.
+
+---
+
+## 🔗 Related Projects
+
+- Frontend repo: [Vue Portfolio](https://bayardolopez.com)
+
