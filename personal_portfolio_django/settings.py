@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
-from decouple import config, Csv
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,6 +25,15 @@ SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
+print(DEBUG)
+
+if DEBUG:
+    import logging
+    logging.basicConfig(level=logging.DEBUG)
+
+    # Set boto3 and botocore log level to debug
+    logging.getLogger('boto3').setLevel(logging.DEBUG)
+    logging.getLogger('botocore').setLevel(logging.DEBUG)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=lambda v: v.split(','))
 
@@ -126,20 +135,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-
-STATIC_URL = 'static/'
-
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-
-STATICFILES_DIRS = [
-    BASE_DIR / 'api/static',
-]
-
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
@@ -152,23 +147,43 @@ REST_FRAMEWORK = {
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Personal Portfolio API',
     'DESCRIPTION': 'This is a personal portfolio API built with **DRF**. It showcases my blog posts and personal projects. I’m using this project to hone my full-stack development skills while creating something personally meaningful.',
-    'VERSION': '0.1.0',
+    'VERSION': '1.0.1',
     'SERVE_INCLUDE_SCHEMA': False,
 }
 
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/5.1/howto/static-files/
+
+STATIC_URL = 'static/'
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+STATICFILES_DIRS = [
+    BASE_DIR / 'api/static',
+]
 
 if DEBUG:
-    # Local development media handling
     MEDIA_URL = '/media/'
     MEDIA_ROOT = BASE_DIR / 'media'
-    DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+    STORAGES = {
+        "default": {
+            "BACKEND": 'django.core.files.storage.FileSystemStorage',
+        },
+        "staticfiles": {
+            "BACKEND": 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+        },
+    }
 else:
-    # Production with S3
-    AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
-    AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
-    AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
-    AWS_S3_REGION_NAME = config('AWS_S3_REGION_NAME')
-    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
-
-    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
+    STORAGES = {
+        "default": {
+            "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+            "OPTIONS": {
+                "access_key": config('AWS_ACCESS_KEY_ID'),
+                "secret_key": config('AWS_SECRET_ACCESS_KEY'),
+                "bucket_name": config('AWS_STORAGE_BUCKET_NAME'),
+            },
+        },
+        "staticfiles": {
+            "BACKEND": 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+        },
+    }
