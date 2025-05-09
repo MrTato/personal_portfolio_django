@@ -8,7 +8,7 @@ This is the backend API for my personal portfolio site. Built with **Django** an
 
 - 📝 **Blog API**  
   - Markdown-based content storage (rendered client-side)  
-  - Draft support via `is_published` field  
+  - Draft support via `published` field  
   - Comment system planned (not yet implemented)  
   - No authentication or admin endpoints — only public `GET` endpoints
 
@@ -22,7 +22,8 @@ This is the backend API for my personal portfolio site. Built with **Django** an
 - 📦 **Hosted on Render**  
   - Managed PostgreSQL database  
   - Automatic deployment on `git push`  
-  - Static files served via Django
+  - Static files served via WhiteNoise  
+  - Media files served via AWS S3 (production only)
 
 ---
 
@@ -34,9 +35,10 @@ This is the backend API for my personal portfolio site. Built with **Django** an
 - [drf-spectacular](https://drf-spectacular.readthedocs.io/)
 - [PostgreSQL](https://www.postgresql.org/)
 
-### 🔹 Middleware
+### 🔹 Middleware & Storage
 - [WhiteNoise](https://whitenoise.evans.io/) for static file handling
 - [django-cors-headers](https://pypi.org/project/django-cors-headers/)
+- [django-storages](https://django-storages.readthedocs.io/) + [AWS S3](https://aws.amazon.com/s3/) for production media storage
 
 ---
 
@@ -85,32 +87,31 @@ This is the backend API for my personal portfolio site. Built with **Django** an
 
 ## 📤 Deployment (Render)
 
-This app is hosted on **Render** using a **native Python environment**. When deploying, the app will use your env variables to create a super user in order to control the admin panel. The environment variables you need to set are:
-SECRET_KEY=
-DEBUG=True
-DB_NAME=personal_portfolio
-DB_USER=
-DB_PASSWORD=
-DB_HOST=localhost
-DB_PORT=5432
-ALLOWED_HOSTS=127.0.0.1,localhost
-CORS_ALLOWED_ORIGINS=http://127.0.0.1:5173,http://localhost:5173
-DJANGO_SUPERUSER_USERNAME
-DJANGO_SUPERUSER_EMAIL
-DJANGO_SUPERUSER_PASSWORD
+This app is hosted on **Render** using a **native Python environment**. Auto-deployment is triggered on every `git push` to the main branch.
 
-If on development, you have to first create the databas in PostgreSQL along with the database user you will use to connect to the database (the default is fine for development).
+In production, static files are served via WhiteNoise, while media files (like uploaded images) are stored and served via **AWS S3**, using `django-storages`.
 
-The DJANGO_* environment variables are used for creating the admin super user automatically.
+### 🔐 Required Environment Variables
 
-Auto-deploy is triggered on `git push` to the main branch.
+- `SECRET_KEY`: The Django secret key
+- `DEBUG`
+- `DB_NAME`
+- `DB_USER`
+- `DB_PASSWORD`
+- `DB_HOST`
+- `DB_PORT`
+- `ALLOWED_HOSTS`: comma-separated values
+- `CORS_ALLOWED_ORIGINS`: comma-separated values as well
+- `DJANGO_SUPERUSER_USERNAME`: automatic super user creation. Keep it here
+- `DJANGO_SUPERUSER_EMAIL`: automatic super user creation. Keep it 
+- `DJANGO_SUPERUSER_PASSWORD`: automatic super user creation
+- `AWS_ACCESS_KEY_ID`
+- `AWS_SECRET_ACCESS_KEY`
+- `AWS_STORAGE_BUCKET_NAME`
 
----
+Make sure to create your PostgreSQL database and user in development before applying migrations.
 
-## 📄 License
-
-This project is for personal use and learning.  
-Feel free to explore and learn from it.
+The `DJANGO_SUPERUSER_*` variables allow Render to auto-create an admin user on deployment.
 
 ---
 
@@ -118,3 +119,9 @@ Feel free to explore and learn from it.
 
 - Frontend repo: [Vue Portfolio](https://bayardolopez.com)
 
+---
+
+## 📄 License
+
+This project is for personal use and learning.  
+Feel free to explore and learn from it.
