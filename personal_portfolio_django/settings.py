@@ -180,6 +180,7 @@ else:
                 "access_key": config('AWS_ACCESS_KEY_ID'),
                 "secret_key": config('AWS_SECRET_ACCESS_KEY'),
                 "bucket_name": config('AWS_STORAGE_BUCKET_NAME'),
+                "querystring_auth": False,
             },
         },
         "staticfiles": {
