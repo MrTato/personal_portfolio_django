@@ -34,6 +34,8 @@ if DEBUG:
     logging.getLogger('boto3').setLevel(logging.DEBUG)
     logging.getLogger('botocore').setLevel(logging.DEBUG)
 
+RECAPTCHA_SECRET_KEY = "" if DEBUG else config('RECAPTCHA_SECRET_KEY')
+
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=lambda v: v.split(','))
 
 # Application definition
