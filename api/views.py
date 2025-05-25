@@ -7,6 +7,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from django.conf import settings
 import requests
+from django.core.mail import send_mail
 
 
 class BlogPostViewSet(viewsets.ReadOnlyModelViewSet):
@@ -42,4 +43,52 @@ class ContactViewSet(mixins.CreateModelMixin,
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
+
+        contact = serializer.instance
+        subject = f"📬 New Contact from {contact.name}"
+        message = (
+            f"Name: {contact.name}\n"
+            f"Email: {contact.email}\n"
+            f"Phone: {contact.phone or 'N/A'}\n\n"
+            f"Message:\n{contact.message}"
+        )
+
+        send_mail(
+            subject,
+            message,
+            settings.DEFAULT_FROM_EMAIL,
+            [settings.CONTACT_RECIPIENT_EMAIL],
+            fail_silently=False,
+        )
+
+        subject = f"📬 Submission confirmation"
+        message = f'''
+Hi {contact.name},
+
+Thank you for getting in touch! I’ve received your message and will get back to you as soon as possible. If your inquiry is urgent, feel free to reply to this email directly.
+
+Here’s a copy of what you submitted:
+
+------------------------------------------------------------
+📧 Email: {contact.email}
+{f"📞 Phone: {contact.phone}" if contact.phone else ""}
+
+📝 Message:
+{contact.message}
+------------------------------------------------------------
+
+In the meantime, feel free to explore more of my work at https://bayardolopez.com
+
+Warm regards,  
+Bayardo López  
+        '''
+
+        send_mail(
+            subject,
+            message,
+            settings.DEFAULT_FROM_EMAIL,
+            [contact.email],
+            fail_silently=False,
+        )
+
         return Response(serializer.data, status=status.HTTP_201_CREATED)
