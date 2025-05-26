@@ -24,15 +24,18 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', include('api.urls')),
     path('admin/', admin.site.urls),
-    path('schema/',
-         SpectacularAPIView.as_view(permission_classes=[IsAuthenticated]), name='schema'),
-    path('swagger/',
-         SpectacularSwaggerView.as_view(url_name='schema', permission_classes=[IsAuthenticated]), name='swagger-ui'),
-    path('redoc/',
-         SpectacularRedocView.as_view(url_name='schema', permission_classes=[IsAuthenticated]), name='redoc'),
-    path('markdownx/', include('markdownx.urls')),
+
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
                           document_root=settings.MEDIA_ROOT)
+    urlpatterns += [
+        path('schema/',
+             SpectacularAPIView.as_view(permission_classes=[IsAuthenticated]), name='schema'),
+        path('swagger/',
+             SpectacularSwaggerView.as_view(url_name='schema', permission_classes=[IsAuthenticated]), name='swagger-ui'),
+        path('redoc/',
+             SpectacularRedocView.as_view(url_name='schema', permission_classes=[IsAuthenticated]), name='redoc'),
+        path('markdownx/', include('markdownx.urls')),
+    ]

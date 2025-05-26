@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import BlogPost
+from .models import Contact
 
 
 class BlogPostSerializer(serializers.ModelSerializer):
@@ -16,3 +17,10 @@ class BlogPostSerializer(serializers.ModelSerializer):
             'updated_at',
             'spotlight',
         )
+
+
+class ContactSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contact
+        fields = ['name', 'email', 'phone', 'message', 'created_at']
+        read_only_fields = ['created_at']

@@ -34,6 +34,8 @@ if DEBUG:
     logging.getLogger('boto3').setLevel(logging.DEBUG)
     logging.getLogger('botocore').setLevel(logging.DEBUG)
 
+RECAPTCHA_SECRET_KEY = "" if DEBUG else config('RECAPTCHA_SECRET_KEY')
+
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=lambda v: v.split(','))
 
 # Application definition
@@ -140,8 +142,17 @@ USE_TZ = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_RENDERER_CLASSES': (
+        ['rest_framework.renderers.JSONRenderer']
+        if not DEBUG else
+        [
+            'rest_framework.renderers.JSONRenderer',
+            'rest_framework.renderers.BrowsableAPIRenderer',
+        ]
+    )
 }
+
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Personal Portfolio API',
@@ -187,3 +198,12 @@ else:
             "BACKEND": 'whitenoise.storage.CompressedManifestStaticFilesStorage',
         },
     }
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+CONTACT_RECIPIENT_EMAIL = config('CONTACT_RECIPIENT_EMAIL')
