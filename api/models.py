@@ -33,6 +33,7 @@ class BlogPost(models.Model):
         blank=True,
         help_text="150x150 image recommended"
     )
+    author = models.CharField(max_length=100, default="Bayardo Lopez")
     created_at = models.DateTimeField(
         auto_now_add=True, editable=False)
     updated_at = models.DateTimeField(
